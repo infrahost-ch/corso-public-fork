@@ -44,6 +44,52 @@ jobs:
           go build -o corso .
           ./corso --version
 
+  Source-Code-Linting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: src
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Golang with cache
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: src/go.mod
+          cache-dependency-path: src/go.sum
+
+      - name: Go Lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          # Keep pinned to a version as updates may add new lint failures in
+          # unchanged code. Must match WANTED_LINT_VERSION in src/Makefile.
+          version: v2.14.0
+          working-directory: src
+          args: --timeout 30m
+
+      - name: Get go-licenses
+        run: go install github.com/google/go-licenses/v2@latest
+
+      # go-jmespath is Apache-2.0, but its LICENSE only carries the short
+      # notice, which the classifier does not recognize.
+      - name: Run go-licenses
+        run: >-
+          go-licenses check github.com/alcionai/corso/src
+          --ignore github.com/alcionai/corso/src
+          --ignore github.com/jmespath/go-jmespath
+
+  Actions-Lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: actionlint
+        uses: raven-actions/actionlint@v2
+        with:
+          fail-on-error: true
+
   Unit-Test-Suite:
     runs-on: ubuntu-latest
     timeout-minutes: 45
