@@ -57,7 +57,9 @@ const (
 // AddGlobalOperationFlags adds the global operations flag set.
 func AddGlobalOperationFlags(cmd *cobra.Command) {
 	fs := cmd.PersistentFlags()
-	fs.BoolVar(&NoStatsFV, NoStatsFN, false, "disable anonymous usage statistics gathering")
+	fs.BoolVar(&NoStatsFV, NoStatsFN, false, "no effect; usage statistics are no longer collected")
+	// Kept so existing scripts that pass --no-stats keep working.
+	cobra.CheckErr(fs.MarkDeprecated(NoStatsFN, "Corso no longer collects usage statistics"))
 }
 
 // AddFailFastFlag adds a flag to toggle fail-fast error handling behavior.

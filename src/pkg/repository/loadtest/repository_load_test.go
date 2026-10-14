@@ -98,7 +98,6 @@ func initM365Repo(t *testing.T) (
 	st := storeTD.NewPrefixedS3Storage(t)
 	ac := tconfig.NewM365Account(t)
 	opts := control.Options{
-		DisableMetrics:  true,
 		FailureHandling: control.FailFast,
 	}
 
