@@ -33,8 +33,6 @@ jobs:
         with:
           version: ${{ needs.SetEnv.outputs.version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          rudderstack_write_key: ${{ secrets.RUDDERSTACK_CORSO_WRITE_KEY }}
-          rudderstack_data_plane_url: ${{ secrets.RUDDERSTACK_CORSO_DATA_PLANE_URL }}
 
       - name: Notify failure in teams
         if: failure()
