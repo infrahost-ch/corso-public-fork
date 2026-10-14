@@ -16,8 +16,10 @@ um festzuhalten, was schon vor der Modernisierung grün oder rot ist.
 - Go **1.21.13**, die Version, mit der die Original-CI aus `go-version-file`
   bauen würde, bezogen über `GOTOOLCHAIN=go1.21.13`
 - Go **1.27.2**, die aktuelle stabile Version, als Vorschau auf Phase 2
-- Die Original-CI lief auf `ubuntu-latest`. Eine Linux-Baseline steht noch
-  aus (siehe unten).
+- Linux-Referenz: GitHub Actions `ubuntu-latest` mit Go 1.21.13, Lauf
+  [38550452479](https://github.com/infrahost-ch/corso/actions/runs/38550452479)
+  des schlanken `ci.yml` aus Phase 1b. Der Code ist gegenüber `880cb899b`
+  unverändert, nur die Workflows unterscheiden sich.
 
 ## Befehle
 
@@ -34,13 +36,16 @@ CORSO_M365_TEST_USER_ID=foo CORSO_SECONDARY_M365_TEST_USER_ID=foo \
 
 ## Ergebnis
 
-| Schritt | Go 1.21.13 | Go 1.27.2 |
-|---|---|---|
-| `go build ./...` | ✅ | ✅ |
-| `go build -o corso .` | ✅ (172 MB, `corso --version` ok) | ✅ |
-| `go vet -tags testing ./...` | ✅ | ✅ ¹ |
-| `go test` (Pakete) | 78 ✅ · 5 ❌ · 55 ohne Tests | 77 ✅ · 6 ❌ · 55 ohne Tests |
-| `go test` (Tests inkl. Subtests) | 5619 ✅ · 28 ❌ · 116 übersprungen | 5616 ✅ · 31 ❌ · 116 übersprungen |
+| Schritt | Linux, Go 1.21.13 | Windows, Go 1.21.13 | Windows, Go 1.27.2 |
+|---|---|---|---|
+| `go build ./...` | ✅ | ✅ | ✅ |
+| `go build -o corso .` | ✅ (`corso --version` ok) | ✅ (172 MB, `corso --version` ok) | ✅ |
+| `go vet -tags testing ./...` | ✅ | ✅ | ✅ ¹ |
+| `go test` (Pakete) | **83 ✅ · 0 ❌** · 55 ohne Tests | 78 ✅ · 5 ❌ · 55 ohne Tests | 77 ✅ · 6 ❌ · 55 ohne Tests |
+| `go test` (Tests inkl. Subtests) | – ² | 5619 ✅ · 28 ❌ · 116 übersprungen | 5616 ✅ · 31 ❌ · 116 übersprungen |
+
+² Die CI läuft ohne `-json`. Das Log weist deshalb nur Pakete aus, keine
+einzelnen Tests.
 
 ¹ Vet ist mit 1.27.2 nur deshalb sauber, weil `go.mod` noch die Sprachversion
 1.21 deklariert. Neuere Prüfungen wie `printf` mit nicht-konstantem
@@ -50,10 +55,10 @@ relevant.
 Die 116 übersprungenen Tests sind die Integrationssuiten (`*IntgSuite`). Sie
 laufen nur mit Test-Tenant und S3 (`CORSO_CI_TESTS` usw.).
 
-## Fehlgeschlagene Tests
+## Fehlgeschlagene Tests (nur Windows)
 
-Alle Fehler sind Windows-spezifisch. Unter beiden Go-Versionen ist das Bild
-gleich. Bei den zeitabhängigen Fällen schwankt von Lauf zu Lauf, welche
+Unter Linux schlägt kein Test fehl. Unter Windows ist das Bild bei beiden
+Go-Versionen gleich. Bei den zeitabhängigen Fällen schwankt von Lauf zu Lauf, welche
 Subtests rot werden.
 
 | Paket | Test | Ursache |
@@ -75,12 +80,11 @@ hat keine `.gitattributes`-Regel für Zeilenenden, nur `*.svg binary`.
 
 - Mit dem unveränderten Code gibt es **keine Build- und keine Vet-Fehler**,
   auch nicht mit Go 1.27.2.
+- **Unter Linux sind alle Unit-Tests grün.** Das ist die Referenz für die
+  folgenden Phasen.
 - Unter Windows gibt es **keine Testfehler, die auf echte Defekte
   hindeuten**. Die roten Tests messen Zeitdifferenzen im Bereich der
   Uhrauflösung oder setzen Unix-Pfade voraus.
-- Die eigentliche Referenz ist Linux, wie in der Original-CI. Die
-  Linux-Baseline läuft über GitHub Actions im Fork, sobald dort ein
-  Build- und Test-Workflow existiert (Phase 2 oder 6).
 - Empfehlung für eine spätere Phase: `.gitattributes` mit
   `* text=auto eol=lf` ergänzen, damit Windows-Checkouts dieselben
   Testdaten wie Linux sehen.
