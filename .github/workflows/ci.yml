@@ -68,8 +68,15 @@ jobs:
           working-directory: src
           args: --timeout 30m
 
+      # Retry: the module proxy occasionally drops the connection.
       - name: Get go-licenses
-        run: go install github.com/google/go-licenses/v2@latest
+        run: |
+          for attempt in 1 2 3; do
+            go install github.com/google/go-licenses/v2@v2.0.1 && exit 0
+            echo "go install failed (attempt ${attempt}), retrying"
+            sleep 15
+          done
+          exit 1
 
       # go-jmespath is Apache-2.0, but its LICENSE only carries the short
       # notice, which the classifier does not recognize.
