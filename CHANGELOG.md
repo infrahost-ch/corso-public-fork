@@ -11,7 +11,6 @@ Changes made in the ScIT fork after `alcionai/corso` was archived on 2024-10-11.
 ### Changed
 - CI: `ci.yml` now only builds, vets and runs the unit tests on Linux and needs no secrets.
 - Go: raised the `go` directive from 1.21 to 1.27.0, with `toolchain go1.27.2`. The Dockerfiles and `build/build.sh` build with Go 1.27, and `docker/Dockerfile` now uses `ubuntu:24.04` instead of the end-of-life `ubuntu:22.10`.
-
 - Dependencies: `azidentity` 1.5.1 → 1.14.1 and `azcore` 1.9.1 → 1.23.3. Their minimum requirements also raise `golang.org/x/{net,crypto,text,sys,sync,mod,tools}`, `golang-jwt/jwt/v5` (5.3.1) and `testify` (1.12.1).
 
 ### Fixed
