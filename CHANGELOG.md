@@ -12,12 +12,16 @@ Changes made in the ScIT fork after `alcionai/corso` was archived on 2024-10-11.
 - CI: `ci.yml` now only builds, vets and runs the unit tests on Linux and needs no secrets.
 - Go: raised the `go` directive from 1.21 to 1.27.0, with `toolchain go1.27.2`. The Dockerfiles and `build/build.sh` build with Go 1.27, and `docker/Dockerfile` now uses `ubuntu:24.04` instead of the end-of-life `ubuntu:22.10`.
 - Dependencies: `azidentity` 1.5.1 → 1.14.1 and `azcore` 1.9.1 → 1.23.3. Their minimum requirements also raise `golang.org/x/{net,crypto,text,sys,sync,mod,tools}`, `golang-jwt/jwt/v5` (5.3.1) and `testify` (1.12.1).
+- Dependencies: Microsoft Graph SDK `msgraph-sdk-go` 1.30.0 → 1.104.0, `msgraph-sdk-go-core` 1.0.1 → 1.4.1, and the Kiota libraries (`kiota-abstractions-go` 1.11.1, `kiota-http-go` 1.5.7, `kiota-authentication-azure-go` 1.3.1, `kiota-serialization-*`). JSON-typed Graph properties are now `serialization.UntypedNodeable`, so the bundled beta SDK models (`WebPartData.properties`, `MetaDataKeyValuePair.value`) use that type.
+- Exchange events: the Graph SDK now models `cancelledOccurrences` and `exceptionOccurrences` as typed event properties instead of leaving them in additional data. Backup (attachments of exceptions), restore (deleting cancelled and patching modified instances) and `.ics` export now read the typed fields, so recurring events keep their cancellations and exceptions. Events stored by older Corso versions are read the same way. The stored JSON keeps the same field names.
+- HTTP behaviour from the newer `kiota-http-go`: the 503/504 retry backoff is now `delay·2^(n-1)` plus jitter, so the waits are shorter than the previous `delay^n`. Redirects to another host drop the `Authorization` and `Cookie` headers. Request bodies are no longer compressed when `Content-Range` or `Content-Encoding` is set.
 
 ### Fixed
 - `corso --version` and the "Backup complete" message no longer pass the version string or backup ID as a format string.
 
 ### Security
 - The Azure SDK update resolves 15 of the 23 vulnerabilities that `govulncheck` reported as reachable, in `azidentity`, `golang-jwt/jwt/v5`, `golang.org/x/net` and `golang.org/x/text`.
+- The Kiota update resolves GO-2026-5224 in `kiota-http-go`.
 
 ### Removed
 - CI: Alcion-specific workflows (nightly, longevity, load, sanity, website publishing, auto-merge, ok-to-test, accSelector, testnotification, test-tenant cleanup) and the composite actions only they used.

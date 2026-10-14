@@ -440,19 +440,20 @@ func (suite *RestoreIntgSuite) TestRestoreAndBackupEvent_recurringInstancesWithA
 	require.NoError(t, err, clues.ToCore(err))
 	assert.NotNil(t, event.GetRecurrence(), "recurrence")
 
-	eo := event.GetAdditionalData()["exceptionOccurrences"]
-	assert.NotNil(t, eo, "exceptionOccurrences")
+	eo := event.GetExceptionOccurrences()
+	require.NotEmpty(t, eo, "exceptionOccurrences")
 
 	assert.NotEqual(
 		t,
 		ptr.Val(event.GetSubject()),
-		ptr.Val(eo.([]any)[0].(map[string]any)["subject"].(*string)),
+		ptr.Val(eo[0].GetSubject()),
 		"name equal")
 
-	atts := eo.([]any)[0].(map[string]any)["attachments"]
+	atts := eo[0].GetAttachments()
+	require.NotEmpty(t, atts, "exception attachments")
 	assert.NotEqual(
 		t,
 		ptr.Val(event.GetAttachments()[0].GetName()),
-		ptr.Val(atts.([]any)[0].(map[string]any)["name"].(*string)),
+		ptr.Val(atts[0].GetName()),
 		"attachment name equal")
 }

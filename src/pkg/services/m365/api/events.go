@@ -18,7 +18,6 @@ import (
 
 	"github.com/alcionai/corso/src/internal/common/ptr"
 	"github.com/alcionai/corso/src/internal/common/sanitize"
-	"github.com/alcionai/corso/src/internal/common/str"
 	"github.com/alcionai/corso/src/pkg/backup/details"
 	"github.com/alcionai/corso/src/pkg/dttm"
 	"github.com/alcionai/corso/src/pkg/fault"
@@ -195,9 +194,9 @@ func (c Events) GetItem(
 		}
 	)
 
-	// Beta endpoint helps us fetch the event exceptions, but since we
-	// don't use the beta SDK, the exceptionOccurrences and
-	// cancelledOccurrences end up in AdditionalData
+	// Beta endpoint helps us fetch the event exceptions via $expand. The
+	// stable SDK models exceptionOccurrences and cancelledOccurrences as
+	// typed properties, so they are populated on the returned event.
 	// https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-beta#properties
 	rawURL := fmt.Sprintf(eventExceptionsBetaURLTemplate, userID, itemID)
 
@@ -231,42 +230,24 @@ func (c Events) GetItem(
 	return event, EventInfo(event), nil
 }
 
-// fixupExceptionOccurrences gets attachments and converts the data
-// into a format that gets serialized when storing to kopia
+// fixupExceptionOccurrences fetches the attachments of each exception
+// occurrence so they get serialized along with the event when storing
+// to kopia.
 func fixupExceptionOccurrences(
 	ctx context.Context,
 	client Events,
 	event models.Eventable,
 	userID string,
 ) error {
-	// Fetch attachments for exceptions
-	exceptionOccurrences := event.GetAdditionalData()["exceptionOccurrences"]
-	if exceptionOccurrences == nil {
-		return nil
-	}
-
-	eo, ok := exceptionOccurrences.([]any)
-	if !ok {
-		return clues.New("converting exceptionOccurrences to []any").
-			With("type", fmt.Sprintf("%T", exceptionOccurrences))
-	}
-
-	for _, instance := range eo {
-		instance, ok := instance.(map[string]any)
-		if !ok {
-			return clues.New("converting instance to map[string]any").
-				With("type", fmt.Sprintf("%T", instance))
-		}
-
-		evt, err := EventFromMap(instance)
-		if err != nil {
-			return clues.Wrap(err, "parsing exception event")
-		}
-
+	for _, evt := range event.GetExceptionOccurrences() {
 		// OPTIMIZATION: We don't have to store any of the
 		// attachments that carry over from the original
 
-		var attachments []models.Attachmentable
+		var (
+			attachments = []models.Attachmentable{}
+			err         error
+		)
+
 		if ptr.Val(event.GetHasAttachments()) || HasAttachments(event.GetBody()) {
 			attachments, err = client.GetAttachments(ctx, userID, ptr.Val(evt.GetId()))
 			if err != nil {
@@ -275,46 +256,21 @@ func fixupExceptionOccurrences(
 			}
 		}
 
-		// This odd roundabout way of doing this is required as
-		// the json serialization at the end does not serialize if
-		// you just pass in a models.Attachmentable
-		convertedAttachments := []map[string]any{}
-
-		for _, attachment := range attachments {
-			am, err := parseableToMap(attachment)
-			if err != nil {
-				return clues.Wrap(err, "converting attachment")
-			}
-
-			convertedAttachments = append(convertedAttachments, am)
-		}
-
-		instance["attachments"] = convertedAttachments
+		evt.SetAttachments(attachments)
 	}
 
 	return nil
 }
 
 func GetCancelledEventDateStrings(event models.Eventable) ([]string, error) {
-	cancelledOccurrences := event.GetAdditionalData()["cancelledOccurrences"]
-	if cancelledOccurrences == nil {
+	co := event.GetCancelledOccurrences()
+	if co == nil {
 		return nil, nil
-	}
-
-	co, ok := cancelledOccurrences.([]any)
-	if !ok {
-		return nil, clues.New("converting cancelledOccurrences to []any").
-			With("type", fmt.Sprintf("%T", cancelledOccurrences))
 	}
 
 	dates := []string{}
 
 	for _, instance := range co {
-		instance, err := str.AnyToString(instance)
-		if err != nil {
-			return nil, err
-		}
-
 		// There might be multiple `.` in the ID and hence >2
 		splits := strings.Split(instance, ".")
 		if len(splits) < 2 {
@@ -324,7 +280,7 @@ func GetCancelledEventDateStrings(event models.Eventable) ([]string, error) {
 
 		startStr := splits[len(splits)-1]
 
-		_, err = dttm.ParseTime(startStr)
+		_, err := dttm.ParseTime(startStr)
 		if err != nil {
 			return nil, clues.Wrap(err, "parsing cancelled event date").
 				With("instance", instance).
@@ -335,29 +291,6 @@ func GetCancelledEventDateStrings(event models.Eventable) ([]string, error) {
 	}
 
 	return dates, nil
-}
-
-func parseableToMap(att serialization.Parsable) (map[string]any, error) {
-	var item map[string]any
-
-	writer := kjson.NewJsonSerializationWriter()
-	defer writer.Close()
-
-	if err := writer.WriteObjectValue("", att); err != nil {
-		return nil, err
-	}
-
-	ats, err := writer.GetSerializedContent()
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(ats, &item)
-	if err != nil {
-		return nil, clues.Wrap(err, "unmarshalling serialized attachment")
-	}
-
-	return item, nil
 }
 
 func (c Events) GetAttachments(

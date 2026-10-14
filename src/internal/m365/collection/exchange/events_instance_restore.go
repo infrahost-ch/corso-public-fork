@@ -2,7 +2,6 @@ package exchange
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
@@ -10,10 +9,8 @@ import (
 	"github.com/microsoftgraph/msgraph-sdk-go/models"
 
 	"github.com/alcionai/corso/src/internal/common/ptr"
-	"github.com/alcionai/corso/src/internal/common/str"
 	"github.com/alcionai/corso/src/pkg/dttm"
 	"github.com/alcionai/corso/src/pkg/fault"
-	"github.com/alcionai/corso/src/pkg/services/m365/api"
 )
 
 type eventInstanceAndAttachmenter interface {
@@ -45,18 +42,12 @@ func updateRecurringEvents(
 		return nil
 	}
 
-	// Cancellations and exceptions are currently in additional data
-	// but will get their own fields once the beta API lands and
-	// should be moved then
-	cancelledOccurrences := event.GetAdditionalData()["cancelledOccurrences"]
-	exceptionOccurrences := event.GetAdditionalData()["exceptionOccurrences"]
-
-	err := updateCancelledOccurrences(ctx, eiaa, userID, itemID, cancelledOccurrences)
+	err := updateCancelledOccurrences(ctx, eiaa, userID, itemID, event.GetCancelledOccurrences())
 	if err != nil {
 		return clues.Wrap(err, "update cancelled occurrences")
 	}
 
-	err = updateExceptionOccurrences(ctx, eiaa, userID, containerID, itemID, exceptionOccurrences, errs)
+	err = updateExceptionOccurrences(ctx, eiaa, userID, containerID, itemID, event.GetExceptionOccurrences(), errs)
 	if err != nil {
 		return clues.Wrap(err, "update exception occurrences")
 	}
@@ -73,31 +64,10 @@ func updateExceptionOccurrences(
 	userID string,
 	containerID string,
 	itemID string,
-	exceptionOccurrences any,
+	exceptionOccurrences []models.Eventable,
 	errs *fault.Bus,
 ) error {
-	if exceptionOccurrences == nil {
-		return nil
-	}
-
-	eo, ok := exceptionOccurrences.([]any)
-	if !ok {
-		return clues.New("converting exceptionOccurrences to []any").
-			With("type", fmt.Sprintf("%T", exceptionOccurrences))
-	}
-
-	for _, instance := range eo {
-		instance, ok := instance.(map[string]any)
-		if !ok {
-			return clues.New("converting instance to map[string]any").
-				With("type", fmt.Sprintf("%T", instance))
-		}
-
-		evt, err := api.EventFromMap(instance)
-		if err != nil {
-			return clues.Wrap(err, "parsing exception event")
-		}
-
+	for _, evt := range exceptionOccurrences {
 		start := ptr.Val(evt.GetOriginalStart())
 		startStr := dttm.FormatTo(start, dttm.DateOnly)
 		endStr := dttm.FormatTo(start.Add(24*time.Hour), dttm.DateOnly)
@@ -119,6 +89,10 @@ func updateExceptionOccurrences(
 				With("instances_count", len(instances), "search_start", startStr, "search_end", endStr)
 		}
 
+		// Keep the backed up attachments around, toEventSimplified
+		// modifies the event in place.
+		attachments := evt.GetAttachments()
+
 		evt = toEventSimplified(evt)
 
 		_, err = eiaa.PatchItem(ictx, userID, ptr.Val(instances[0].GetId()), evt)
@@ -126,13 +100,7 @@ func updateExceptionOccurrences(
 			return clues.Wrap(err, "updating event instance")
 		}
 
-		// We are creating event again from map as `toEventSimplified`
-		// removed the attachments and creating a clone from start of
-		// the event is non-trivial
-		evt, err = api.EventFromMap(instance)
-		if err != nil {
-			return clues.Wrap(err, "parsing event instance")
-		}
+		evt.SetAttachments(attachments)
 
 		err = updateAttachments(
 			ictx,
@@ -158,27 +126,12 @@ func updateCancelledOccurrences(
 	eiaa eventInstanceAndAttachmenter,
 	userID string,
 	itemID string,
-	cancelledOccurrences any,
+	cancelledOccurrences []string,
 ) error {
-	if cancelledOccurrences == nil {
-		return nil
-	}
-
-	co, ok := cancelledOccurrences.([]any)
-	if !ok {
-		return clues.New("converting cancelledOccurrences to []any").
-			With("type", fmt.Sprintf("%T", cancelledOccurrences))
-	}
-
 	// OPTIMIZATION: We can fetch a date range instead of fetching
 	// instances if we have multiple cancelled events which are nearby
 	// and reduce the number of API calls that we have to make
-	for _, instance := range co {
-		instance, err := str.AnyToString(instance)
-		if err != nil {
-			return err
-		}
-
+	for _, instance := range cancelledOccurrences {
 		splits := strings.Split(instance, ".")
 
 		startStr := splits[len(splits)-1]

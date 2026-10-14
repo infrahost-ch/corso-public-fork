@@ -74,8 +74,9 @@ var eventUnsupportedAdditionalData = []string{
 	"@odata.context",
 	// Appears to be similar to the change tag.
 	"@odata.etag",
-	// Remove exceptions for recurring events. These will be present in objects
-	// once we start using the API that is currently in beta.
+	// Exceptions for recurring events are restored separately. The SDK models
+	// them as typed properties, which toEventSimplified also clears. They stay
+	// listed here so they can never be sent back via additional data.
 	"cancelledOccurrences",
 	"exceptionOccurrences",
 }
@@ -103,6 +104,10 @@ func toEventSimplified(orig models.Eventable) models.Eventable {
 	orig.SetId(nil)
 	orig.SetOdataType(nil)
 	orig.SetChangeKey(nil)
+	// Read-only on create/update. Cancellations and exceptions get restored
+	// separately by updateRecurringEvents.
+	orig.SetCancelledOccurrences(nil)
+	orig.SetExceptionOccurrences(nil)
 
 	// Additional fields that don't have API support but are ignored by the
 	// server.

@@ -153,11 +153,13 @@ func (suite *TransformUnitTest) TestToEventSimplified_recurrence() {
 				bytes := exchMock.EventWithRecurrenceAndCancellationBytes(subject)
 				event, err := api.BytesToEventable(bytes)
 				require.NoError(t, err, clues.ToCore(err))
+				require.NotEmpty(t, event.GetCancelledOccurrences(), "input cancelledOccurrences")
 				return event
 			},
 
 			validateOutput: func(e models.Eventable) bool {
-				return e.GetAdditionalData()["cancelledOccurrences"] == nil
+				return e.GetCancelledOccurrences() == nil &&
+					e.GetAdditionalData()["cancelledOccurrences"] == nil
 			},
 		},
 		{
@@ -166,11 +168,13 @@ func (suite *TransformUnitTest) TestToEventSimplified_recurrence() {
 				bytes := exchMock.EventWithRecurrenceAndExceptionBytes(subject)
 				event, err := api.BytesToEventable(bytes)
 				require.NoError(t, err, clues.ToCore(err))
+				require.NotEmpty(t, event.GetExceptionOccurrences(), "input exceptionOccurrences")
 				return event
 			},
 
 			validateOutput: func(e models.Eventable) bool {
-				return e.GetAdditionalData()["exceptionOccurrences"] == nil
+				return e.GetExceptionOccurrences() == nil &&
+					e.GetAdditionalData()["exceptionOccurrences"] == nil
 			},
 		},
 	}
