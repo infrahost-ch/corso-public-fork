@@ -37,7 +37,7 @@ const (
 		"IiwiaXNsb29wYmFjayI6IlRydWUiLCJ2ZXIiOiJoYXNoZWRwcm9vZnRva2VuIiwicm9sZXMiOiJhbGxmaWxl" +
 		"cy53cml0ZSBhbGxzaXRlcy5mdWxsY29udHJvbCBhbGxwcm9maWxlcy5yZWFkIiwidHQiOiIxIiwiYWxnIjoi" +
 		"SFMyNTYifQ" +
-		".signature"
+		".c2lnbmF0dXJl" // base64url("signature"): jwt/v5 5.3 also decodes the signature in ParseUnverified
 )
 
 func (suite *JWTUnitSuite) TestIsJWTExpired() {
