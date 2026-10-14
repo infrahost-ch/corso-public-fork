@@ -12,8 +12,13 @@ Changes made in the ScIT fork after `alcionai/corso` was archived on 2024-10-11.
 - CI: `ci.yml` now only builds, vets and runs the unit tests on Linux and needs no secrets.
 - Go: raised the `go` directive from 1.21 to 1.27.0, with `toolchain go1.27.2`. The Dockerfiles and `build/build.sh` build with Go 1.27, and `docker/Dockerfile` now uses `ubuntu:24.04` instead of the end-of-life `ubuntu:22.10`.
 
+- Dependencies: `azidentity` 1.5.1 → 1.14.1 and `azcore` 1.9.1 → 1.23.3. Their minimum requirements also raise `golang.org/x/{net,crypto,text,sys,sync,mod,tools}`, `golang-jwt/jwt/v5` (5.3.1) and `testify` (1.12.1).
+
 ### Fixed
 - `corso --version` and the "Backup complete" message no longer pass the version string or backup ID as a format string.
+
+### Security
+- The Azure SDK update resolves 15 of the 23 vulnerabilities that `govulncheck` reported as reachable, in `azidentity`, `golang-jwt/jwt/v5`, `golang.org/x/net` and `golang.org/x/text`.
 
 ### Removed
 - CI: Alcion-specific workflows (nightly, longevity, load, sanity, website publishing, auto-merge, ok-to-test, accSelector, testnotification, test-tenant cleanup) and the composite actions only they used.
