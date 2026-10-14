@@ -7,29 +7,33 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    reviewers:
-      - "alcionai/corso-maintainers"
-    open-pull-requests-limit: 50
-    rebase-strategy: "disabled"
-
-  # Maintain dependencies for npm - website
-  - package-ecosystem: "npm"
-    directory: "website/"
-    schedule:
-      interval: "daily"
-    reviewers:
-      - "alcionai/corso-maintainers"
-      - "ntolia"
-      - "gmatev"
-    open-pull-requests-limit: 50
-    rebase-strategy: "disabled"
+    groups:
+      actions:
+        patterns: ["*"]
+    open-pull-requests-limit: 5
 
   # Maintain dependencies for go - src
   - package-ecosystem: "gomod"
     directory: "src/"
     schedule:
-      interval: "daily"
-    reviewers:
-      - "alcionai/corso-maintainers"
-    open-pull-requests-limit: 50
-    rebase-strategy: "disabled"
+      interval: "weekly"
+    groups:
+      graph-sdk:
+        patterns:
+          - "github.com/microsoftgraph/*"
+          - "github.com/microsoft/kiota-*"
+          - "github.com/Azure/azure-sdk-for-go/*"
+      go-deps:
+        patterns: ["*"]
+    ignore:
+      # Pinned through a replace directive (Alcion fork); see design/fork/kopia-analyse.md.
+      - dependency-name: "github.com/kopia/kopia"
+      - dependency-name: "github.com/xhit/go-simple-mail/v2"
+      # >= 7.0.83 breaks the S3 credentials provider of the Alcion kopia fork.
+      - dependency-name: "github.com/minio/minio-go/v7"
+        versions: [">= 7.0.83"]
+      # Later versions moved the error helpers into cluerr.
+      - dependency-name: "github.com/alcionai/clues"
+      # Pinned by the original maintainers ("do not update").
+      - dependency-name: "github.com/vbauerster/mpb/v8"
+    open-pull-requests-limit: 5
