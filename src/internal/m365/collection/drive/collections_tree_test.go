@@ -2022,6 +2022,7 @@ func (suite *CollectionsTreeUnitSuite) TestCollections_EnumeratePageOfItems_fold
 				fault.New(true))
 
 			test.expect.err(t, err, clues.ToCore(err))
+
 			if test.expect.shouldHitLimit {
 				assert.ErrorIs(t, err, errHitLimit, clues.ToCore(err))
 			}

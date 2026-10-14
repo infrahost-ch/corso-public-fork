@@ -375,6 +375,7 @@ func (suite *DrivePagerIntgSuite) TestDriveDeltaPagerQueryParams() {
 					"drive",
 					"",
 					cfg)
+
 			for _, reset, done := pager.NextPage(); !done; _, reset, done = pager.NextPage() {
 				assert.False(t, reset, "should not reset")
 			}

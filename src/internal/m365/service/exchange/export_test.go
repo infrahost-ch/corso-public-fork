@@ -452,7 +452,6 @@ func (suite *ExportUnitSuite) TestExportRestoreCollections() {
 					assert.Equal(t, tt.expectedItems[c][i].ID, item.ID, "id")
 					assert.Equal(t, tt.expectedItems[c][i].Name, item.Name, "name")
 					assert.NoError(t, item.Error, "error")
-
 				}
 			}
 

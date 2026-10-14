@@ -684,6 +684,7 @@ func (suite *PopulatedDataLayerResourcePath) TestUpdateParent() {
 
 			updated := item.UpdateParent(prev, cur)
 			assert.Equal(t, tc.updated, updated, "path updated")
+
 			if tc.updated {
 				assert.Equal(t, expected, item, "modified path")
 			}

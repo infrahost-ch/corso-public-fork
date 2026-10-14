@@ -37,6 +37,7 @@ func (suite *MockSuite) TestMockExchangeCollection() {
 	for item := range mdc.Items(ctx, fault.New(true)) {
 		_, err := io.ReadAll(item.ToReader())
 		assert.NoError(t, err, clues.ToCore(err))
+
 		messagesRead++
 	}
 
@@ -129,6 +130,7 @@ func (suite *MockExchangeDataSuite) TestMockExchangeData() {
 			buf, err := io.ReadAll(test.reader.ToReader())
 
 			test.check(t, err, clues.ToCore(err))
+
 			if err != nil {
 				return
 			}

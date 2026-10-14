@@ -97,6 +97,7 @@ func (suite *SharepointPageUnitSuite) TestCreatePageFromBytes() {
 			result, err := api.BytesToSitePageable(test.getBytes(t))
 			test.checkError(t, err)
 			test.isNil(t, result)
+
 			if result != nil {
 				assert.Equal(t, "Tested", *result.GetName(), "name")
 				assert.Equal(t, "Tested", *result.GetTitle(), "title")

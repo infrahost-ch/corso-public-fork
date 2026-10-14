@@ -67,6 +67,7 @@ func (suite *OneDriveSelectorSuite) TestOneDriveSelector_AllData() {
 			t := suite.T()
 
 			require.Len(t, test.scopesToCheck, 1)
+
 			for _, scope := range test.scopesToCheck {
 				scopeMustHave(
 					t,

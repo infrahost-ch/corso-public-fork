@@ -242,7 +242,6 @@ func fixupExceptionOccurrences(
 	for _, evt := range event.GetExceptionOccurrences() {
 		// OPTIMIZATION: We don't have to store any of the
 		// attachments that carry over from the original
-
 		var (
 			attachments = []models.Attachmentable{}
 			err         error

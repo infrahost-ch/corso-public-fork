@@ -127,6 +127,7 @@ func (suite *SharePointBackupUnitSuite) TestCollectLists() {
 			assert.Equal(t, test.canUsePreviousBackup, canUsePreviousBackup)
 
 			newStates, metadatas := 0, 0
+
 			for _, c := range cs {
 				if c.FullPath() != nil && c.FullPath().Service() == path.SharePointMetadataService {
 					metadatas++
@@ -302,6 +303,7 @@ func (suite *SharePointBackupUnitSuite) TestPopulateListsCollections_incremental
 			assert.Len(t, cs, test.expectColls, "number of collections")
 
 			newStates, notMovedStates, metadatas, tombstoned := 0, 0, 0, 0
+
 			for _, c := range cs {
 				if c.FullPath() != nil && c.FullPath().Service() == path.SharePointMetadataService {
 					metadatas++

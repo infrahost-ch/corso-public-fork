@@ -423,7 +423,9 @@ func (suite *RestorePathTransformerUnitSuite) TestGetPaths() {
 
 			for _, e := range test.expected {
 				tmp := path.RestorePaths{}
+
 				var p path.Path
+
 				var err error
 
 				if test.isSharepointList {
@@ -431,6 +433,7 @@ func (suite *RestorePathTransformerUnitSuite) TestGetPaths() {
 				} else {
 					p, err = path.FromDataLayerPath(e.storage, true)
 				}
+
 				require.NoError(t, err, "parsing expected storage path", clues.ToCore(err))
 
 				tmp.StoragePath = p
@@ -440,6 +443,7 @@ func (suite *RestorePathTransformerUnitSuite) TestGetPaths() {
 				} else {
 					p, err = path.FromDataLayerPath(e.restore, false)
 				}
+
 				require.NoError(t, err, "parsing expected restore path", clues.ToCore(err))
 
 				if e.isRestorePrefix {

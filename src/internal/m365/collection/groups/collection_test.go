@@ -693,7 +693,6 @@ func (suite *CollectionUnitSuite) TestLazyFetchCollection_Conversations() {
 				assert.NoError(t, err, clues.ToCore(err))
 
 				r.Close()
-
 			}
 		})
 	}

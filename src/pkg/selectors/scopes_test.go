@@ -659,6 +659,7 @@ func (suite *SelectorScopesSuite) TestScopesPII() {
 			fs := mockFMTState{sb}
 
 			format(test.s, &fs, 0)
+
 			for _, c := range test.contains {
 				assert.Contains(t, sb.String(), c, "conceal")
 			}

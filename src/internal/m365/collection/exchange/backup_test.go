@@ -202,8 +202,9 @@ func (m mockResolver) Items() []graph.CachedContainer {
 }
 
 func (m mockResolver) AddToCache(ctx context.Context, ctrl graph.Container) error {
+	// Value receiver: the map initialized here is dropped. Kept as in upstream.
 	if len(m.added) == 0 {
-		m.added = map[string]string{}
+		m.added = map[string]string{} //nolint:revive // modifies-value-receiver, test mock
 	}
 
 	m.added[ptr.Val(ctrl.GetDisplayName())] = ptr.Val(ctrl.GetId())
@@ -214,7 +215,9 @@ func (m mockResolver) DestinationNameToID(dest string) string { return m.added[d
 func (m mockResolver) IDToPath(context.Context, string) (*path.Builder, *path.Builder, error) {
 	return nil, nil, nil
 }
-func (m mockResolver) PathInCache(string) (string, bool)                             { return "", false }
+
+func (m mockResolver) PathInCache(string) (string, bool) { return "", false }
+
 func (m mockResolver) LocationInCache(string) (string, bool)                         { return "", false }
 func (m mockResolver) Populate(context.Context, *fault.Bus, string, ...string) error { return nil }
 
@@ -834,6 +837,7 @@ func (suite *BackupIntgSuite) TestContactSerializationRegression() {
 					contact, err := api.BytesToContactable(buf.Bytes())
 					assert.NotNil(t, contact)
 					assert.NoError(t, err, "converting contact bytes: "+buf.String(), clues.ToCore(err))
+
 					count++
 				}
 
@@ -927,6 +931,7 @@ func (suite *BackupIntgSuite) TestEventsSerializationRegression() {
 					assert.Contains(t, dlp.LocationPath().Elements(), test.expectedContainerName)
 				} else {
 					isMetadata = true
+
 					assert.Empty(t, edc.FullPath().Folder(false))
 				}
 
@@ -1194,6 +1199,7 @@ func (suite *CollectionPopulationSuite) TestPopulateCollections() {
 				// collection assertions
 
 				deleteds, news, metadatas, doNotMerges := 0, 0, 0, 0
+
 				for _, c := range collections {
 					if c.FullPath().Service() == path.ExchangeMetadataService {
 						metadatas++
@@ -1537,6 +1543,7 @@ func (suite *CollectionPopulationSuite) TestFilterContainersAndFillCollections_D
 					// collection assertions
 
 					deleteds, news, metadatas := 0, 0, 0
+
 					for _, c := range collections {
 						if c.State() == data.DeletedState {
 							deleteds++
@@ -1545,7 +1552,9 @@ func (suite *CollectionPopulationSuite) TestFilterContainersAndFillCollections_D
 
 						if c.FullPath().Service() == path.ExchangeMetadataService {
 							metadatas++
+
 							checkMetadata(t, ctx, qp.Category, test.expectMetadata(t, qp.Category), c)
+
 							continue
 						}
 
@@ -1704,6 +1713,7 @@ func (suite *CollectionPopulationSuite) TestFilterContainersAndFillCollections_r
 			// collection assertions
 
 			deleteds, news, metadatas, doNotMerges := 0, 0, 0, 0
+
 			for _, c := range collections {
 				if c.FullPath().Service() == path.ExchangeMetadataService {
 					metadatas++
@@ -2154,6 +2164,7 @@ func (suite *CollectionPopulationSuite) TestFilterContainersAndFillCollections_P
 
 					assert.True(t, found, "unexpected item %v", item.ID())
 				}
+
 				require.NoError(t, errs.Failure())
 
 				assert.Empty(
@@ -2711,6 +2722,7 @@ func (suite *CollectionPopulationSuite) TestFilterContainersAndFillCollections_i
 					if test.skipWhenForcedNoDelta {
 						suite.T().Skip("intentionally skipped non-delta case")
 					}
+
 					name += "-non-delta"
 				}
 
@@ -2755,6 +2767,7 @@ func (suite *CollectionPopulationSuite) TestFilterContainersAndFillCollections_i
 					assert.NoError(t, err, clues.ToCore(err))
 
 					metadatas := 0
+
 					for _, c := range collections {
 						p := c.FullPath()
 						if p == nil {

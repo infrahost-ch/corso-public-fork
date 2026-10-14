@@ -342,10 +342,10 @@ func generateAndRestoreDriveItems(
 		folderBPath = []string{"drives", driveID, "root:", folderBName}
 		folderCPath = []string{"drives", driveID, "root:", folderCName}
 
-		now              = time.Now()
-		year, mnth, date = now.Date()
-		hour, min, sec   = now.Clock()
-		currentTime      = fmt.Sprintf("%d-%v-%d-%d-%d-%d", year, mnth, date, hour, min, sec)
+		now               = time.Now()
+		year, mnth, date  = now.Date()
+		hour, minute, sec = now.Clock()
+		currentTime       = fmt.Sprintf("%d-%v-%d-%d-%d-%d", year, mnth, date, hour, minute, sec)
 	)
 
 	for i := 0; i < intCount; i++ {

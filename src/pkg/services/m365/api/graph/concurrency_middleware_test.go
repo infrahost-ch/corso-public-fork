@@ -1,6 +1,7 @@
 package graph
 
 import (
+	"context"
 	"math/rand"
 	"net/http"
 	"net/http/httptest"
@@ -13,7 +14,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-	"golang.org/x/net/context"
 
 	"github.com/alcionai/corso/src/internal/tester"
 	"github.com/alcionai/corso/src/pkg/count"
@@ -71,6 +71,7 @@ func (suite *ConcurrencyMWUnitTestSuite) TestConcurrencyLimiter() {
 			assert.Equal(t, http.StatusOK, resp.StatusCode)
 		}()
 	}
+
 	wg.Wait()
 }
 
@@ -169,7 +170,8 @@ func (suite *ConcurrencyMWUnitTestSuite) TestTimedFence_Block_ctxDeadline() {
 	ctx, flush := tester.NewContext(t)
 	defer flush()
 
-	ctx, _ = context.WithDeadline(ctx, time.Now().Add(2*time.Second))
+	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(2*time.Second))
+	defer cancel()
 
 	tf := newTimedFence()
 

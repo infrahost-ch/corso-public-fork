@@ -452,7 +452,6 @@ func updateEventProperties(ctx context.Context, event models.Eventable, iCalEven
 				// field technically supports UTF-8, Outlook does not
 				// seem to work with it.  Exchange does similar things
 				// when it attaches the event to an email.
-
 				// nolint:lll
 				// https://learn.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-oxcical/d7f285da-9c7a-4597-803b-b74193c898a8
 				// X-ALT-DESC field uses "Text" as in https://www.rfc-editor.org/rfc/rfc2445#section-4.3.11

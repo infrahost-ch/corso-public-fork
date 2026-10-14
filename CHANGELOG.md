@@ -10,6 +10,10 @@ Changes made in the ScIT fork after `alcionai/corso` was archived on 2024-10-11.
 
 ### Changed
 - CI: `ci.yml` now only builds, vets and runs the unit tests on Linux and needs no secrets.
+- CI: linting uses golangci-lint 2.14 with the configuration migrated to the v2 format. staticcheck runs inside golangci-lint again and replaces the former standalone step. CI also checks dependency licenses (`go-licenses`) and the workflows (`actionlint`).
+- Releases: a new `release.yml` builds binaries with GoReleaser v2 when a `v*.*.*` tag is pushed and attaches them to the GitHub release (Linux, macOS, Windows; amd64/arm64). Manual runs produce a snapshot artifact.
+- Dependabot: weekly, grouped updates for Go modules and GitHub Actions, without the Alcion reviewers and the website. Modules that are deliberately held back are excluded.
+- Code: replaced deprecated APIs reported by staticcheck. Drive permission invites now use `PostAsInvitePostResponse` (Graph SDK), `pflag` uses `ParseErrorsAllowlist`, and a test uses the standard `context` package instead of `golang.org/x/net/context`.
 - Go: raised the `go` directive from 1.21 to 1.27.0, with `toolchain go1.27.2`. The Dockerfiles and `build/build.sh` build with Go 1.27, and `docker/Dockerfile` now uses `ubuntu:24.04` instead of the end-of-life `ubuntu:22.10`.
 - Dependencies: `azidentity` 1.5.1 → 1.14.1 and `azcore` 1.9.1 → 1.23.3. Their minimum requirements also raise `golang.org/x/{net,crypto,text,sys,sync,mod,tools}`, `golang-jwt/jwt/v5` (5.3.1) and `testify` (1.12.1).
 - Dependencies: Microsoft Graph SDK `msgraph-sdk-go` 1.30.0 → 1.104.0, `msgraph-sdk-go-core` 1.0.1 → 1.4.1, and the Kiota libraries (`kiota-abstractions-go` 1.11.1, `kiota-http-go` 1.5.7, `kiota-authentication-azure-go` 1.3.1, `kiota-serialization-*`). JSON-typed Graph properties are now `serialization.UntypedNodeable`, so the bundled beta SDK models (`WebPartData.properties`, `MetaDataKeyValuePair.value`) use that type.
@@ -32,6 +36,7 @@ Changes made in the ScIT fork after `alcionai/corso` was archived on 2024-10-11.
 ### Removed
 - Telemetry: Corso no longer sends anonymous usage statistics to RudderStack. The event bus drops all events, and the `rudderlabs/analytics-go` dependency, the `RUDDERSTACK_CORSO_*` environment variables and the related build flags are gone.
 - CI: Alcion-specific workflows (nightly, longevity, load, sanity, website publishing, auto-merge, ok-to-test, accSelector, testnotification, test-tenant cleanup) and the composite actions only they used.
+- CI: `binary-publish.yml` and the `publish-binary`/`teams-message` actions, replaced by `release.yml`. The `allowtags` check and the tree-grepper rules (trailing commas, empty string comparison, clues usage) were dropped as well. `allowtags` fails with Go 1.27 and the tree-grepper rules required Nix.
 
 ## [Unreleased] (beta)
 ### Fixed

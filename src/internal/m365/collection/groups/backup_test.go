@@ -313,6 +313,7 @@ func (suite *BackupUnitSuite) TestPopulateCollections() {
 			// collection assertions
 
 			deleteds, news, metadatas, doNotMerges := 0, 0, 0, 0
+
 			for _, c := range collections {
 				if c.FullPath().Service() == path.GroupsMetadataService {
 					metadatas++
@@ -474,6 +475,7 @@ func (suite *BackupUnitSuite) TestPopulateCollections_incremental() {
 			// collection assertions
 
 			tombstones, news, metadatas, doNotMerges := 0, 0, 0, 0
+
 			for _, c := range collections {
 				if c.FullPath() != nil && c.FullPath().Service() == path.GroupsMetadataService {
 					metadatas++
@@ -772,6 +774,7 @@ func (suite *BackupUnitSuite) TestPopulateCollections_Conversations() {
 			// collection assertions
 
 			deleteds, news, metadatas, doNotMerges := 0, 0, 0, 0
+
 			for _, c := range collections {
 				if c.FullPath().Service() == path.GroupsMetadataService {
 					metadatas++
@@ -933,6 +936,7 @@ func (suite *BackupUnitSuite) TestPopulateCollections_ConversationsIncremental()
 			// collection assertions
 
 			tombstones, news, metadatas, doNotMerges := 0, 0, 0, 0
+
 			for _, c := range collections {
 				if c.FullPath() != nil && c.FullPath().Service() == path.GroupsMetadataService {
 					metadatas++

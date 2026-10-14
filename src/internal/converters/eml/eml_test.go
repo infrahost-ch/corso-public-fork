@@ -79,6 +79,7 @@ func (suite *EMLUnitSuite) TestFormatAddress() {
 			if len(tt.name) != 0 {
 				entity.SetName(ptr.To(tt.name))
 			}
+
 			if len(tt.email) != 0 {
 				entity.SetAddress(ptr.To(tt.email))
 			}

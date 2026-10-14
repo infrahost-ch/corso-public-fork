@@ -64,6 +64,7 @@ func (suite *CommonConfigsSuite) TestUnionConfigs_string() {
 			if test.ac.err != nil || test.bc.err != nil {
 				return
 			}
+
 			assert.Equalf(t,
 				test.ac.expectA,
 				cs[keyExpect],

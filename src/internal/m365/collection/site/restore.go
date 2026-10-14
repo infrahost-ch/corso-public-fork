@@ -133,11 +133,11 @@ func handleListReplace(
 
 	patchList := models.NewList()
 	patchList.SetDisplayName(listFromBackup.GetDisplayName())
+
 	_, err = rh.PatchList(
 		ctx,
 		ptr.Val(restoredList.GetId()),
 		patchList)
-
 	if err != nil {
 		return nil, clues.WrapWC(ctx, err, "patching list")
 	}
@@ -184,6 +184,7 @@ func RestoreListCollection(
 			if !ok {
 				return metrics, nil
 			}
+
 			metrics.Objects++
 
 			itemInfo, err := restoreListItem(
@@ -277,6 +278,7 @@ func RestorePageCollection(
 			if !ok {
 				return metrics, nil
 			}
+
 			metrics.Objects++
 
 			itemInfo, err := betaAPI.RestoreSitePage(

@@ -1001,6 +1001,7 @@ func (suite *CollectionUnitSuite) TestItemExtensions() {
 	for _, test := range table {
 		suite.Run(test.name, func() {
 			t := suite.T()
+
 			ctx, flush := tester.NewContext(t)
 			defer flush()
 

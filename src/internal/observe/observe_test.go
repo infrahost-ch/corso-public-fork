@@ -65,6 +65,7 @@ func (suite *ObserveProgressUnitSuite) TestObserve_ItemProgress() {
 
 		assert.NoError(t, err, clues.ToCore(err))
 		assert.Equal(t, 25, n)
+
 		i++
 	}
 

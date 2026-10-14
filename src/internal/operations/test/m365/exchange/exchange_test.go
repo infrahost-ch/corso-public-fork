@@ -1188,6 +1188,7 @@ func (suite *ExchangeRestoreNightlyIntgSuite) TestRestore_Run_exchangeWithAdvanc
 				require.NoError(t, err, clues.ToCore(err))
 
 				assert.Equal(t, len(itemIDs[cat]), len(currentIDs), "count of ids are equal")
+
 				for orig := range itemIDs[cat] {
 					assert.NotContains(t, currentIDs, orig, "original item should not exist after replacement")
 				}

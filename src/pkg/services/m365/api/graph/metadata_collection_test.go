@@ -193,6 +193,7 @@ func (suite *MetadataCollectionUnitSuite) TestMakeMetadataCollection() {
 				test.cat,
 				false)
 			test.pathPrefixCheck(t, err, "path prefix")
+
 			if err != nil {
 				return
 			}
@@ -204,16 +205,19 @@ func (suite *MetadataCollectionUnitSuite) TestMakeMetadataCollection() {
 				count.New())
 
 			test.errCheck(t, err, clues.ToCore(err))
+
 			if err != nil {
 				return
 			}
 
 			test.collectionCheck(t, col)
+
 			if col == nil {
 				return
 			}
 
 			itemCount := 0
+
 			for item := range col.Items(ctx, fault.New(true)) {
 				assert.Equal(t, test.metadata.fileName, item.ID())
 
