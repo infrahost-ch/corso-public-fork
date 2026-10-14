@@ -262,7 +262,8 @@ func FromEventable(ctx context.Context, event models.Eventable) (string, error) 
 		}
 	}
 
-	return cal.Serialize(), nil
+	// RFC 5545 requires CRLF; golang-ical defaults to the OS line ending.
+	return cal.Serialize(ics.WithNewLineWindows), nil
 }
 
 func getTZDataKeyValues(ctx context.Context, timezone string) (map[string]string, error) {
