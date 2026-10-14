@@ -1212,19 +1212,19 @@ func (s *ICSUnitSuite) TestAttachments() {
 func (s *ICSUnitSuite) TestCancellations() {
 	table := []struct {
 		name         string
-		cancelledIds []string
+		cancelledIDs []string
 		expected     string
 	}{
 		{
 			name: "single",
-			cancelledIds: []string{
+			cancelledIDs: []string{
 				"OID.DEADBEEF=.2024-01-25",
 			},
 			expected: "EXDATE:20240125",
 		},
 		{
 			name: "multiple",
-			cancelledIds: []string{
+			cancelledIDs: []string{
 				"OID.DEADBEEF=.2024-01-25",
 				"OID.LIVEBEEF=.2024-02-26",
 			},
@@ -1243,8 +1243,9 @@ func (s *ICSUnitSuite) TestCancellations() {
 
 			e.SetIsCancelled(ptr.To(true))
 			e.SetAdditionalData(map[string]any{
-				"cancelledOccurrences": tt.cancelledIds,
+				"cancelledOccurrences": tt.cancelledIDs,
 			})
+
 			bts, err := eventToJSON(e)
 			require.NoError(t, err, "getting serialized content")
 
@@ -1470,6 +1471,7 @@ func (s *ICSUnitSuite) TestGetRecurrenceTimezone() {
 			defer flush()
 
 			event := baseEvent()
+
 			if len(tt.intz) > 0 {
 				recur := models.NewPatternedRecurrence()
 				rp := models.NewRecurrenceRange()

@@ -100,7 +100,7 @@ func (suite *DTTMUnitSuite) TestOrNow() {
 }
 
 func (suite *DTTMUnitSuite) TestExtractTime() {
-	comparable := func(t *testing.T, tt time.Time, shortFormat dttm.TimeFormat) time.Time {
+	toComparable := func(t *testing.T, tt time.Time, shortFormat dttm.TimeFormat) time.Time {
 		ts := dttm.FormatToLegacy(tt.UTC())
 
 		if len(shortFormat) > 0 {
@@ -180,7 +180,7 @@ func (suite *DTTMUnitSuite) TestExtractTime() {
 			for _, ps := range pss {
 				table = append(table, testable{
 					input:         ps.prefix + v + ps.suffix,
-					expect:        comparable(suite.T(), in, shortFormat),
+					expect:        toComparable(suite.T(), in, shortFormat),
 					clippedFormat: shortFormat,
 				})
 			}
@@ -193,7 +193,7 @@ func (suite *DTTMUnitSuite) TestExtractTime() {
 
 			result, err := dttm.ExtractTime(test.input)
 			require.NoError(t, err, clues.ToCore(err))
-			assert.Equal(t, test.expect, comparable(t, result, test.clippedFormat))
+			assert.Equal(t, test.expect, toComparable(t, result, test.clippedFormat))
 		})
 	}
 }
