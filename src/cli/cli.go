@@ -88,7 +88,7 @@ func handleMailBoxFlag(ctx context.Context, c *cobra.Command, flagNames []string
 func handleCorsoCmd(cmd *cobra.Command, args []string) error {
 	v, _ := cmd.Flags().GetBool("version")
 	if v {
-		print.Outf(cmd.Context(), "Corso version: "+version.CurrentVersion())
+		print.Outf(cmd.Context(), "Corso version: %s", version.CurrentVersion())
 		return nil
 	}
 

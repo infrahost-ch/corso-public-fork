@@ -10,6 +10,10 @@ Changes made in the ScIT fork after `alcionai/corso` was archived on 2024-10-11.
 
 ### Changed
 - CI: `ci.yml` now only builds, vets and runs the unit tests on Linux and needs no secrets.
+- Go: raised the `go` directive from 1.21 to 1.27.0, with `toolchain go1.27.2`. The Dockerfiles and `build/build.sh` build with Go 1.27, and `docker/Dockerfile` now uses `ubuntu:24.04` instead of the end-of-life `ubuntu:22.10`.
+
+### Fixed
+- `corso --version` and the "Backup complete" message no longer pass the version string or backup ID as a format string.
 
 ### Removed
 - CI: Alcion-specific workflows (nightly, longevity, load, sanity, website publishing, auto-merge, ok-to-test, accSelector, testnotification, test-tenant cleanup) and the composite actions only they used.
