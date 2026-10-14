@@ -4,7 +4,7 @@
 # It is not used for deployments.
 
 ## Build
-FROM golang:1.19 AS base
+FROM golang:1.27 AS base
 
 WORKDIR /src
 
@@ -20,7 +20,7 @@ ARG TARGETARCH
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /corso .
 
 ## Deploy
-FROM ubuntu:22.10
+FROM ubuntu:24.04
 
 COPY --from=build /corso /
 
