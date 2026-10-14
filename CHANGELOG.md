@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] (ScIT fork)
+Changes made in the ScIT fork after `alcionai/corso` was archived on 2024-10-11.
+
+### Changed
+- CI: `ci.yml` now only builds, vets and runs the unit tests on Linux and needs no secrets.
+
+### Removed
+- CI: Alcion-specific workflows (nightly, longevity, load, sanity, website publishing, auto-merge, ok-to-test, accSelector, testnotification, test-tenant cleanup) and the composite actions only they used.
+
 ## [Unreleased] (beta)
 ### Fixed
 - Handle the case where an email or event cannot be retrieved from Exchange due to an `ErrorCorruptData` error. Corso will skip over the item but report it in the backup summary.
