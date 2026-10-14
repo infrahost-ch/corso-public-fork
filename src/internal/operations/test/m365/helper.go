@@ -97,6 +97,7 @@ func CheckMetadataFilesExist(
 				paths = append(
 					paths,
 					path.RestorePaths{StoragePath: p, RestorePath: dir})
+
 				pathsByRef[dir.ShortRef()] = append(pathsByRef[dir.ShortRef()], fName[len(fName)-1])
 			}
 

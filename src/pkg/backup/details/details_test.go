@@ -1561,6 +1561,7 @@ func (suite *DetailsUnitSuite) TestLocationIDer_FromEntry() {
 
 			rr := ""
 			detailsLoc := ""
+
 			if test.category == path.ListsCategory.String() {
 				rr = fmt.Sprintf(listsRrString, test.service, test.category)
 				detailsLoc = expectedListDetailsLoc

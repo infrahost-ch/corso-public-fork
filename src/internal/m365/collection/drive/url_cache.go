@@ -165,6 +165,7 @@ func (uc *urlCache) refreshCache(
 	defer uc.cacheMu.Unlock()
 
 	logger.Ctx(ctx).Info("refreshing url cache")
+
 	uc.refreshCount++
 
 	pager := uc.enumerator.EnumerateDriveItemsDelta(

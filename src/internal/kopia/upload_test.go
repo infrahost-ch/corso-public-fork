@@ -782,6 +782,7 @@ func (suite *HierarchyBuilderUnitSuite) TestBuildDirectoryTree_MixedDirectory() 
 
 			// One of these entries should be a subdirectory with items in it.
 			subDirs := []fs.Directory(nil)
+
 			for _, e := range entries {
 				d, ok := e.(fs.Directory)
 				if !ok {
@@ -964,6 +965,7 @@ func (suite *HierarchyBuilderUnitSuite) TestBuildDirectoryTreeErrors() {
 			}
 
 			cols := []data.BackupCollection{}
+
 			for _, s := range test.states {
 				prevPath := storePath
 				nowPath := storePath

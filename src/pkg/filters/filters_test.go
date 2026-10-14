@@ -444,6 +444,7 @@ func (suite *FiltersSuite) TestPathPrefix() {
 			)
 
 			test.expectPrefix.fn(t, f.Compare(test.input), "filter")
+
 			if test.expectPrefix.yes {
 				no.fn(t, nf.Compare(test.input), "negated filter")
 			} else {
@@ -474,6 +475,7 @@ func (suite *FiltersSuite) TestPathContains() {
 			)
 
 			test.expectContains.fn(t, f.Compare(test.input), "filter")
+
 			if test.expectContains.yes {
 				no.fn(t, nf.Compare(test.input), "negated filter")
 			} else {
@@ -504,6 +506,7 @@ func (suite *FiltersSuite) TestPathSuffix() {
 			)
 
 			test.expectSuffix.fn(t, f.Compare(test.input), "filter")
+
 			if test.expectSuffix.yes {
 				no.fn(t, nf.Compare(test.input), "negated filter")
 			} else {
@@ -534,6 +537,7 @@ func (suite *FiltersSuite) TestPathEquals() {
 			)
 
 			test.expectEquals.fn(t, f.Compare(test.input), "filter")
+
 			if test.expectEquals.yes {
 				no.fn(t, nf.Compare(test.input), "negated filter")
 			} else {

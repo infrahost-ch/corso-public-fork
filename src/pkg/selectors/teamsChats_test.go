@@ -242,6 +242,7 @@ func (suite *TeamsChatsSelectorSuite) TestTeamsChatsScope_Get() {
 				case TeamsChatsChat:
 					assert.Equal(t, Any(), sc.Get(TeamsChatsChat))
 				}
+
 				assert.Equal(t, None(), sc.Get(TeamsChatsCategoryUnknown))
 			}
 		})
@@ -345,7 +346,9 @@ func (suite *TeamsChatsSelectorSuite) TestTeamsChatsScope_MatchesPath() {
 			t := suite.T()
 
 			scopes := setScopesToDefault(test.scope)
+
 			var aMatch bool
+
 			for _, scope := range scopes {
 				pvs, err := TeamsChatsChat.pathValues(repoRef, ent, Config{})
 				require.NoError(t, err)
@@ -355,6 +358,7 @@ func (suite *TeamsChatsSelectorSuite) TestTeamsChatsScope_MatchesPath() {
 					break
 				}
 			}
+
 			test.expect(t, aMatch)
 		})
 	}
@@ -662,12 +666,14 @@ func (suite *TeamsChatsSelectorSuite) TestContains() {
 			t := suite.T()
 
 			var result bool
+
 			for _, scope := range test.scopes {
 				if scope.Matches(TeamsChatsChat, target) {
 					result = true
 					break
 				}
 			}
+
 			test.expect(t, result)
 		})
 	}
@@ -695,12 +701,14 @@ func (suite *TeamsChatsSelectorSuite) TestIsAny() {
 			t := suite.T()
 
 			var result bool
+
 			for _, scope := range test.scopes {
 				if scope.IsAny(test.cat) {
 					result = true
 					break
 				}
 			}
+
 			test.expect(t, result)
 		})
 	}

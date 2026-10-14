@@ -1344,6 +1344,7 @@ func RunDriveRestoreWithAdvancedOptions(
 		require.NoError(t, err, clues.ToCore(err))
 
 		assert.Equal(t, len(fileIDs), len(currentFileIDs), "count of ids ids are equal")
+
 		for orig := range fileIDs {
 			assert.NotContains(t, currentFileIDs, orig, "original item should not exist after replacement")
 		}

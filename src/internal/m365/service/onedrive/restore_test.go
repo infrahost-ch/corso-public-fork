@@ -173,6 +173,7 @@ func (suite *RestoreUnitSuite) TestAugmentRestorePaths() {
 			base := "id/onedrive/user/files/drives/driveID/root:/"
 
 			inPaths := []path.RestorePaths{}
+
 			for _, ps := range test.input {
 				p, err := path.FromDataLayerPath(base+ps, true)
 				require.NoError(t, err, "creating path", clues.ToCore(err))
@@ -186,6 +187,7 @@ func (suite *RestoreUnitSuite) TestAugmentRestorePaths() {
 			}
 
 			outPaths := []path.RestorePaths{}
+
 			for _, ps := range test.output {
 				p, err := path.FromDataLayerPath(base+ps, true)
 				require.NoError(t, err, "creating path", clues.ToCore(err))
@@ -277,6 +279,7 @@ func (suite *RestoreUnitSuite) TestAugmentRestorePaths_DifferentRestorePath() {
 			base := "id/onedrive/user/files/drives/driveID/root:/"
 
 			inPaths := []path.RestorePaths{}
+
 			for _, ps := range test.input {
 				p, err := path.FromDataLayerPath(base+ps.storage, true)
 				require.NoError(t, err, "creating path", clues.ToCore(err))
@@ -290,6 +293,7 @@ func (suite *RestoreUnitSuite) TestAugmentRestorePaths_DifferentRestorePath() {
 			}
 
 			outPaths := []path.RestorePaths{}
+
 			for _, ps := range test.output {
 				p, err := path.FromDataLayerPath(base+ps.storage, true)
 				require.NoError(t, err, "creating path", clues.ToCore(err))

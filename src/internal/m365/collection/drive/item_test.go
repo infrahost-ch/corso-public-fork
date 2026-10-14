@@ -447,6 +447,7 @@ func (suite *ItemUnitTestSuite) TestDownloadItem() {
 	for _, test := range table {
 		suite.Run(test.name, func() {
 			t := suite.T()
+
 			ctx, flush := tester.NewContext(t)
 			defer flush()
 

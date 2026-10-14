@@ -67,6 +67,7 @@ func RestoreCollection(
 
 			ictx := clues.Add(ctx, "item_id", itemData.ID())
 			trace.Log(ictx, "m365:exchange:restoreCollection:item", itemData.ID())
+
 			metrics.Objects++
 
 			buf := &bytes.Buffer{}

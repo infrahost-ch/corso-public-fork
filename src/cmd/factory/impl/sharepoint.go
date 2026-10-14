@@ -113,6 +113,7 @@ func handleSharepointListsFactory(cmd *cobra.Command, args []string) error {
 				logger.CtxErr(ctx, err)
 				return nil
 			}
+
 			return listBytes
 		},
 		control.DefaultOptions(),

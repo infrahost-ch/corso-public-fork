@@ -50,6 +50,7 @@ func InitializeConcurrencyLimiter(ctx context.Context, enable bool, capacity int
 			concurrencyLimitMiddlewareSingleton.semaphore = generateConcurrencyLimiter(capacity).semaphore
 		case false:
 			logger.Ctx(ctx).Info("turning off the concurrency limiter")
+
 			concurrencyLimitMiddlewareSingleton = nil
 		}
 	})

@@ -76,6 +76,7 @@ func (suite *ListsUnitSuite) TestSharePointInfo() {
 			assert.Equal(t, expected.ItemType, info.ItemType)
 			assert.Equal(t, expected.ItemName, info.ItemName)
 			assert.Equal(t, expected.WebURL, info.WebURL)
+
 			if expected.List != nil {
 				assert.Equal(t, expected.List.ItemCount, info.List.ItemCount)
 			}

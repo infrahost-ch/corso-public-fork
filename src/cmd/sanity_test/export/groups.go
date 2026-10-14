@@ -58,6 +58,7 @@ func removeDeletedMessages(
 		for _, leaf := range child.Leaves {
 			if leaf.Self.GetDeletedDateTime() != nil {
 				delete(child.Leaves, leaf.ID)
+
 				child.CountLeaves--
 			}
 		}

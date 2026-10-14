@@ -639,6 +639,7 @@ func (suite *CollectionUnitSuite) TestCollection_SkippedErrors() {
 			}
 
 			assert.NoError(t, errs.Failure())
+
 			if test.expectedSkipError != nil {
 				assert.Len(t, errs.Skipped(), 1)
 				skippedItem := errs.Skipped()[0].Item

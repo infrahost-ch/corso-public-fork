@@ -2830,6 +2830,7 @@ func (suite *CollectionsUnitSuite) TestAddURLCacheToDriveCollections() {
 			// Also check that each drive gets its own cache instance.
 			for drive, driveCols := range colsByDrive {
 				var uc *urlCache
+
 				for _, col := range driveCols {
 					require.NotNil(t, col.urlCache, "cache is nil")
 

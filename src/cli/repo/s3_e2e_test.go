@@ -195,6 +195,7 @@ func (suite *S3E2ESuite) TestConnectS3Cmd() {
 				tconfig.TestCfgStorageProvider: storage.ProviderS3.String(),
 				tconfig.TestCfgPrefix:          cfg.Prefix,
 			}
+
 			vpr, configFP := tconfig.MakeTempTestConfigClone(t, force)
 			if !test.hasConfigFile {
 				// Ideally we could use `/dev/null`, but you need a

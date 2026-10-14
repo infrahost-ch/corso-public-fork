@@ -148,6 +148,7 @@ func (suite *SanitizeJSONUnitSuite) TestJSONBytes() {
 			if test.expect != nil {
 				assert.Equal(t, test.expect, got)
 			}
+
 			test.expectValid(t, json.Valid(got))
 		})
 	}

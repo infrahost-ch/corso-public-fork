@@ -171,6 +171,7 @@ func (suite *RestoreExchangeE2ESuite) TestExchangeRestoreCmd_badTimeFlags() {
 			defer flush()
 
 			var timeFilter string
+
 			switch set {
 			case email:
 				timeFilter = "--" + flags.EmailReceivedAfterFN
@@ -203,10 +204,12 @@ func (suite *RestoreExchangeE2ESuite) TestExchangeRestoreCmd_badBoolFlags() {
 
 			//nolint:forbidigo
 			ctx := config.SetViper(context.Background(), suite.vpr)
+
 			ctx, flush := tester.WithContext(t, ctx)
 			defer flush()
 
 			var timeFilter string
+
 			switch set {
 			case events:
 				timeFilter = "--" + flags.EventRecursFN

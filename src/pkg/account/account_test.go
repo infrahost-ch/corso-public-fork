@@ -57,6 +57,7 @@ func (suite *AccountSuite) TestNewAccount() {
 			if test.c.err != nil {
 				return
 			}
+
 			assert.Equalf(t,
 				test.p,
 				s.Provider,

@@ -662,6 +662,7 @@ func (oc *Collection) streamDriveItem(
 			observe.ItemBackupMsg,
 			clues.Hide(itemName+metaSuffix),
 			int64(itemMetaSize))
+
 		return progReader, nil
 	})
 

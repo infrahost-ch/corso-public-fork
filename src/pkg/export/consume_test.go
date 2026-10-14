@@ -154,6 +154,7 @@ func (suite *ExportE2ESuite) TestConsumeExportCollection() {
 			defer flush()
 
 			ecs := []Collectioner{}
+
 			for _, col := range test.cols {
 				items := []Item{}
 				for _, item := range col.items {
@@ -163,12 +164,13 @@ func (suite *ExportE2ESuite) TestConsumeExportCollection() {
 							Body:  nil,
 							Error: item.err,
 						})
+
 						continue
 					}
 
 					items = append(items, Item{
 						Name: item.name,
-						Body: io.NopCloser((bytes.NewBufferString(item.body))),
+						Body: io.NopCloser(bytes.NewBufferString(item.body)),
 					})
 				}
 

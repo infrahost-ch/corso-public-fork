@@ -572,6 +572,7 @@ func (suite *ExchangeSelectorSuite) TestExchangeScope_Get() {
 					assert.Equal(t, Any(), sc.Get(ExchangeMail))
 					assert.Equal(t, Any(), sc.Get(ExchangeMailFolder))
 				}
+
 				assert.Equal(t, None(), sc.Get(ExchangeCategoryUnknown))
 			}
 		})
@@ -750,7 +751,9 @@ func (suite *ExchangeSelectorSuite) TestExchangeScope_MatchesPath() {
 			t := suite.T()
 
 			scopes := setScopesToDefault(test.scope)
+
 			var aMatch bool
+
 			for _, scope := range scopes {
 				pvs, err := ExchangeMail.pathValues(repo, ent, Config{})
 				require.NoError(t, err)
@@ -760,6 +763,7 @@ func (suite *ExchangeSelectorSuite) TestExchangeScope_MatchesPath() {
 					break
 				}
 			}
+
 			test.expect(t, aMatch)
 		})
 	}
@@ -1407,12 +1411,14 @@ func (suite *ExchangeSelectorSuite) TestContains() {
 			t := suite.T()
 
 			var result bool
+
 			for _, scope := range test.scopes {
 				if scope.Matches(ExchangeMail, target) {
 					result = true
 					break
 				}
 			}
+
 			test.expect(t, result)
 		})
 	}
@@ -1440,12 +1446,14 @@ func (suite *ExchangeSelectorSuite) TestIsAny() {
 			t := suite.T()
 
 			var result bool
+
 			for _, scope := range test.scopes {
 				if scope.IsAny(test.cat) {
 					result = true
 					break
 				}
 			}
+
 			test.expect(t, result)
 		})
 	}

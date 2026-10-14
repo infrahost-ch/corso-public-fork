@@ -1424,6 +1424,7 @@ func (suite *ControllerIntegrationSuite) TestProduceBackupCollections_createsPre
 
 			// Use a map to find duplicates.
 			foundCategories := map[string]struct{}{}
+
 			var foundPrefixCollection bool
 
 			for i, col := range dcs {
@@ -1451,6 +1452,7 @@ func (suite *ControllerIntegrationSuite) TestProduceBackupCollections_createsPre
 					t.Log("prefix collection tests")
 					assert.NotEqual(t, col.State(), data.NewState, "prefix collection must have New status")
 					assert.Zero(t, found, "prefix collection must not contain items")
+
 					foundPrefixCollection = true
 				}
 

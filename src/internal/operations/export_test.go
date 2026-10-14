@@ -262,6 +262,7 @@ func (suite *ExportUnitSuite) TestZipExports() {
 			zippedItems := []export.Item{}
 
 			count := 0
+
 			for item := range zc.Items(ctx) {
 				assert.True(t, strings.HasPrefix(item.Name, "Corso_Export_"), "name prefix")
 				assert.True(t, strings.HasSuffix(item.Name, ".zip"), "name suffix")

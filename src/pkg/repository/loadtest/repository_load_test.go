@@ -360,6 +360,7 @@ func ensureAllUsersInDetails(
 			}
 
 			ct := p.Category()
+
 			if !assert.NotEmpty(t, ro, "category type of path: "+rr) {
 				continue
 			}

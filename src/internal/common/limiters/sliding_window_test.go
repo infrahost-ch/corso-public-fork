@@ -142,6 +142,7 @@ func (suite *SlidingWindowUnitTestSuite) TestWaitNSliding() {
 					require.NoError(t, err)
 				}()
 			}
+
 			wg.Wait()
 
 			// Shutdown the ticker before accessing the internal limiter state.
@@ -341,6 +342,7 @@ func (suite *SlidingWindowUnitTestSuite) TestReset() {
 			require.NoError(t, err)
 		}()
 	}
+
 	wg.Wait()
 
 	// Reset the limiter.
@@ -404,6 +406,7 @@ func (suite *SlidingWindowUnitTestSuite) TestResetDuringActiveRequests() {
 			}()
 		}
 	}
+
 	wg.Wait()
 
 	// Shutdown the ticker before accessing the internal limiter state.

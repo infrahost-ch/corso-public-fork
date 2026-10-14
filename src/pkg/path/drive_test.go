@@ -64,9 +64,11 @@ func (suite *OneDrivePathSuite) Test_ToOneDrivePath() {
 
 			got, err := path.ToDrivePath(p)
 			tt.errCheck(t, err)
+
 			if err != nil {
 				return
 			}
+
 			assert.Equal(suite.T(), tt.expected, got)
 		})
 	}

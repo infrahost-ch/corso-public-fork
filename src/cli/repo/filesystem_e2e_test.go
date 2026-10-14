@@ -119,6 +119,7 @@ func (suite *FilesystemE2ESuite) TestConnectFilesystemCmd() {
 				tconfig.TestCfgStorageProvider: storage.ProviderFilesystem.String(),
 				tconfig.TestCfgFilesystemPath:  cfg.Path,
 			}
+
 			vpr, configFP := tconfig.MakeTempTestConfigClone(t, force)
 			if !test.hasConfigFile {
 				// Ideally we could use `/dev/null`, but you need a

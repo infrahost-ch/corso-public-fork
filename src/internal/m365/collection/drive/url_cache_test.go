@@ -170,6 +170,7 @@ func (suite *URLCacheIntegrationSuite) TestURLCacheBasic() {
 			require.Equal(t, http.StatusOK, resp.StatusCode)
 		}(i)
 	}
+
 	wg.Wait()
 
 	// Validate that exactly 1 delta query was made by url cache
@@ -531,6 +532,7 @@ func (suite *URLCacheUnitSuite) TestGetItemProperties() {
 					require.NoError(t, err, clues.ToCore(err))
 
 					var wg sync.WaitGroup
+
 					wg.Add(numConcurrentReqs)
 
 					startTime := time.Now()
