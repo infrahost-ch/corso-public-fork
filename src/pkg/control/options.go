@@ -9,7 +9,9 @@ import (
 type Options struct {
 	// DeltaPageSize controls the quantity of items fetched in each page
 	// during multi-page queries, such as graph api delta endpoints.
-	DeltaPageSize        int32                              `json:"deltaPageSize"`
+	DeltaPageSize int32 `json:"deltaPageSize"`
+	// Deprecated: Corso no longer collects usage statistics, so this has no
+	// effect.
 	DisableMetrics       bool                               `json:"disableMetrics"`
 	FailureHandling      FailurePolicy                      `json:"failureHandling"`
 	ItemExtensionFactory []extensions.CreateItemExtensioner `json:"-"`

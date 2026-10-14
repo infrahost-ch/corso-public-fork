@@ -26,7 +26,11 @@ Changes made in the ScIT fork after `alcionai/corso` was archived on 2024-10-11.
 - The Kiota update resolves GO-2026-5224 in `kiota-http-go`.
 - After updating the remaining dependencies (`golang.org/x/net` 0.61.0, `grpc` 1.84.0), `govulncheck ./...` reports no vulnerabilities.
 
+### Deprecated
+- The `--no-stats` flag and `control.Options.DisableMetrics` have no effect anymore. The flag is hidden from the help output and still accepted, so existing scripts keep working.
+
 ### Removed
+- Telemetry: Corso no longer sends anonymous usage statistics to RudderStack. The event bus drops all events, and the `rudderlabs/analytics-go` dependency, the `RUDDERSTACK_CORSO_*` environment variables and the related build flags are gone.
 - CI: Alcion-specific workflows (nightly, longevity, load, sanity, website publishing, auto-merge, ok-to-test, accSelector, testnotification, test-tenant cleanup) and the composite actions only they used.
 
 ## [Unreleased] (beta)

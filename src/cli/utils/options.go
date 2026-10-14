@@ -20,7 +20,6 @@ func Control() control.Options {
 	}
 
 	opt.DeltaPageSize = dps
-	opt.DisableMetrics = flags.NoStatsFV
 	opt.SkipReduce = flags.SkipReduceFV
 	opt.ToggleFeatures.DisableIncrementals = flags.DisableIncrementalsFV
 	opt.ToggleFeatures.ForceItemDataDownload = flags.ForceItemDataDownloadFV

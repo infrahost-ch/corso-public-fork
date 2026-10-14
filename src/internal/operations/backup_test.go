@@ -386,7 +386,8 @@ func (suite *BackupOpUnitSuite) TestNewBackupOperation_configuredOptionsMatchInp
 	}
 
 	opts := control.Options{
-		DeltaPageSize:        42,
+		DeltaPageSize: 42,
+		// Deprecated and without effect, but still a field checkPopulated sees.
 		DisableMetrics:       true,
 		FailureHandling:      control.FailAfterRecovery,
 		ItemExtensionFactory: slices.Clone(ext),

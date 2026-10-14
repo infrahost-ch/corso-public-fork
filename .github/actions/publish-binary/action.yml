@@ -8,12 +8,6 @@ inputs:
   github_token:
     description: GitHub token for publishing
     required: true
-  rudderstack_write_key:
-    description: Write key for RudderStack
-    required: true
-  rudderstack_data_plane_url:
-    description: Data plane URL for RudderStack
-    required: true
 
 runs:
   using: composite
@@ -41,8 +35,6 @@ runs:
         workdir: src
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
-        RUDDERSTACK_CORSO_WRITE_KEY: ${{ inputs.rudderstack_write_key }}
-        RUDDERSTACK_CORSO_DATA_PLANE_URL: ${{ inputs.rudderstack_data_plane_url }}
         CORSO_VERSION: ${{ inputs.version }}
 
     - name: Upload darwin arm64

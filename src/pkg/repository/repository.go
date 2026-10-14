@@ -97,23 +97,10 @@ func New(
 	opts control.Options,
 	configFileRepoID string,
 ) (singleRepo *repository, err error) {
-	ctx = clues.Add(
-		ctx,
-		"acct_provider", acct.Provider.String(),
-		"acct_id", clues.Hide(acct.ID()),
-		"storage_provider", st.Provider.String())
-
-	bus, err := events.NewBus(ctx, st, acct.ID(), opts)
-	if err != nil {
-		return nil, clues.WrapWC(ctx, err, "constructing event bus")
-	}
-
 	repoID := configFileRepoID
 	if len(configFileRepoID) == 0 {
 		repoID = newRepoID(st)
 	}
-
-	bus.SetRepoID(repoID)
 
 	r := repository{
 		ID:      repoID,
@@ -121,12 +108,8 @@ func New(
 		Account: acct,
 		Storage: st,
 		counter: count.New(),
-		Bus:     bus,
+		Bus:     events.NewBus(),
 		Opts:    opts,
-	}
-
-	if !r.Opts.DisableMetrics {
-		bus.SetRepoID(r.ID)
 	}
 
 	return &r, nil
