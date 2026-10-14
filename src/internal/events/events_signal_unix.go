@@ -7,7 +7,7 @@ import (
 	"context"
 	"syscall"
 
-	"github.com/armon/go-metrics"
+	"github.com/hashicorp/go-metrics"
 
 	"github.com/alcionai/corso/src/pkg/logger"
 )
